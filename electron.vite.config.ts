@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import viteReact from '@vitejs/plugin-react'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   main: {
@@ -16,6 +17,7 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [ TanStackRouterVite({ autoCodeSplitting: true }), viteReact()]
+    plugins: [
+      tailwindcss(), TanStackRouterVite({ autoCodeSplitting: true }), viteReact()]
   }
 })

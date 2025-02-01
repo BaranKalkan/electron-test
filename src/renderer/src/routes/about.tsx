@@ -6,5 +6,5 @@ export const Route = createFileRoute('/about')({
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function About() {
-  return <div className="p-2">Hello from About!</div>
+  return <div className="p-2 underline">Hello from About!</div>
 }
