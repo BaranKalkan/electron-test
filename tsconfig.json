@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node16",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
   },
   "files": [],
