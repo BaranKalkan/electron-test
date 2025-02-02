@@ -2,6 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { dbOperations } from './db'
+import { User, BaseResponse } from '../renderer/src/types/types'
 
 function createWindow(): void {
   // Create the browser window.
@@ -51,6 +53,27 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+
+  // Database IPC handlers
+  ipcMain.handle('get-users', async () => {
+    try {
+      const users = dbOperations.getAllUsers() as User[];
+      return { success: true, data: users };
+    } catch (error) {
+      return { success: false, error: error };
+    }
+  });
+
+  ipcMain.handle('add-user', async (_, name: string, email: string): Promise<BaseResponse<User>> => {
+    try {
+      const result = dbOperations.addUser(name, email);
+      //  as unknown as User must be changed
+      return { success: true, data: result as unknown as User };
+    } catch (error) {
+      return { success: false, error: error };
+    }
+  });
 
   createWindow()
 

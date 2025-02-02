@@ -1,10 +1,16 @@
+import { DataService } from '@renderer/services/DataService'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/about')({
   component: About,
+  loader: () => DataService.getUsers(),
 })
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function About() {
-  return <div className="p-2 underline">Hello from About!</div>
+  const userData = Route.useLoaderData()
+
+  if(userData.success)
+    return <div className="p-2 underline">{userData.data.map(user=> <p key={user.id}>{user.id} - {user.name}</p>)}</div>
+  
+  return <div className="p-2 underline">{userData.error}</div>
 }
