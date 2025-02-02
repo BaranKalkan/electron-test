@@ -65,9 +65,9 @@ app.whenReady().then(() => {
     }
   });
 
-  ipcMain.handle('add-user', async (_, name: string, email: string): Promise<BaseResponse<User>> => {
+  ipcMain.handle('add-user', async (_, userWithoutId: Omit<User, 'id'>): Promise<BaseResponse<User>> => {
     try {
-      const result = dbOperations.addUser(name, email);
+      const result = dbOperations.addUser(userWithoutId.name, userWithoutId.email);
       //  as unknown as User must be changed
       return { success: true, data: result as unknown as User };
     } catch (error) {

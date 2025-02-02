@@ -9,5 +9,6 @@ export type BaseResponse<T> = {
 export type User = {
     id: string;
     name: string;
+    email: string;
 };
   
