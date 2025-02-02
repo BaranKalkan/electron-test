@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "moduleResolution": "bundler",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "allowSyntheticDefaultImports": true
   },
   "files": [],
