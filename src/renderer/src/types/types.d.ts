@@ -11,8 +11,3 @@ export type User = {
     name: string;
 };
   
-export type DataService = {
-    getUsers: () => Promise<BaseResponse<User[]>>;
-    addUser: (user: Omit<User, 'id'>) => Promise<BaseResponse<User>>;
-};
-  

@@ -1,4 +1,9 @@
-import { DataService } from "@renderer/types/types"
+import { BaseResponse, User } from "@renderer/types/types";
+
+type DataService = {
+    getUsers: () => Promise<BaseResponse<User[]>>;
+    addUser: (user: Omit<User, 'id'>) => Promise<BaseResponse<User>>;
+};
 
 const ElectronDataService: DataService = {
     addUser: (userWithoutId) => window.electron.ipcRenderer.invoke('add-user', userWithoutId),
