@@ -23,9 +23,9 @@ try {
   insertUser.run('Ahmet Yılmaz', 'ahmet@example.com');
   insertUser.run('Ayşe Demir', 'ayse@example.com');
   insertUser.run('Mehmet Kaya', 'mehmet@example.com');
-  console.log('Örnek veriler başarıyla eklendi');
+  console.log('Sample data has been added successfully');
 } catch (error) {
-  console.log('Örnek veri eklenirken hata:', error);
+  console.log('Error while adding sample data:', error);
 }
 
 export const dbOperations = {
