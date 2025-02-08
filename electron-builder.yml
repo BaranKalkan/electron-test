@@ -1,5 +1,5 @@
 appId: com.antek.anser
-productName: Anda Teknoloji Servis Takip Sistemi
+productName: AnTek Servis Takip Sistemi
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: anser
+  executableName: AnSer
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

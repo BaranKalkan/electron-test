@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useTheme } from '../context/ThemeContext'
 import { useState, useRef, useEffect } from 'react'
 import { Line, Bar, Pie } from 'react-chartjs-2'
 import {
@@ -34,8 +33,7 @@ export const Route = createFileRoute('/reports')({
 })
 
 function Reports() {
-  const { theme } = useTheme()
-  const isDark = theme === 'dark'
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
   const [selectedReport, setSelectedReport] = useState('daily')
   const [startDate, setStartDate] = useState(() => {
     const date = new Date()
@@ -49,6 +47,23 @@ function Reports() {
   const [showReportTypeDropdown, setShowReportTypeDropdown] = useState(false)
   const reportTypeDropdownRef = useRef<HTMLDivElement>(null)
   const reportTypeButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDark(document.documentElement.classList.contains('dark'))
+        }
+      })
+    })
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+
+    return () => observer.disconnect()
+  }, [])
 
   // Dışarı tıklamayı dinle
   useEffect(() => {

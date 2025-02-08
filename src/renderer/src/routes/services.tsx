@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useTheme } from '../context/ThemeContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export const Route = createFileRoute('/services')({
   component: Services,
@@ -88,13 +87,29 @@ const servicesData = [
 ]
 
 function Services() {
-  const { theme } = useTheme()
-  const isDark = theme === 'dark'
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
   const [searchTerm, setSearchTerm] = useState('')
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [statusFilter, setStatusFilter] = useState<string | null>(null)
   const itemsPerPage = 5
+
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDark(document.documentElement.classList.contains('dark'))
+        }
+      })
+    })
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+
+    return () => observer.disconnect()
+  }, [])
 
   // Filtreleme fonksiyonu
   const filteredServices = servicesData.filter(service => {

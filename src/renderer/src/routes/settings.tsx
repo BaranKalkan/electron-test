@@ -1,20 +1,45 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useTheme } from '../context/ThemeContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export const Route = createFileRoute('/settings')({
   component: Settings,
 })
 
 function Settings() {
-  const { theme, setTheme } = useTheme()
-  const isDark = theme === 'dark'
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
   const [dateFormat, setDateFormat] = useState('DD/MM/YYYY')
   const [autoUpdate, setAutoUpdate] = useState(true)
   const [backupLocation, setBackupLocation] = useState('C:/AnTek/Backups')
   const [autoBackup, setAutoBackup] = useState(true)
   const [lastBackupDate, setLastBackupDate] = useState('20.03.2024 15:30')
   const [currentVersion, setCurrentVersion] = useState('1.0.0')
+
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDark(document.documentElement.classList.contains('dark'))
+        }
+      })
+    })
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
+  const setTheme = (value: string) => {
+    const newDarkMode = value === 'dark'
+    localStorage.setItem('darkMode', String(newDarkMode))
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }
 
   return (
     <div className="p-4 space-y-6">
@@ -54,7 +79,7 @@ function Settings() {
                   Tema
                 </label>
                 <select
-                  value={theme}
+                  value={isDark ? 'dark' : 'light'}
                   onChange={(e) => setTheme(e.target.value)}
                   className={`w-full px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isDark 

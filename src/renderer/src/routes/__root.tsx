@@ -1,6 +1,5 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { useTheme } from '../context/ThemeContext'
 import { useState } from 'react'
 import { companyConfig } from '../config/companyConfig'
 
@@ -82,43 +81,27 @@ const menuItems = [
 
 export const Route = createRootRoute({
   component: () => {
-    const { theme, toggleTheme } = useTheme();
-    const isDark = theme === 'dark';
-    const [isSidebarOpen, setSidebarOpen] = useState(true);
+    const [isSidebarOpen, setSidebarOpen] = useState(true)
 
     const getLinkClassName = (isActive: boolean) => `
       block px-4 py-2 rounded-lg transition-all duration-200 ease-in-out
       ${isActive 
-        ? (isDark 
-          ? 'bg-gradient-to-r from-blue-900 to-sky-900 text-blue-300' 
-          : 'bg-gradient-to-r from-blue-50 to-sky-50 text-blue-600'
-        )
-        : (isDark
-          ? 'text-gray-300 hover:bg-gray-700'
-          : 'text-gray-600 hover:bg-gray-100'
-        )
+        ? 'bg-gradient-to-r from-blue-50 to-sky-50 text-blue-600 dark:from-blue-900 dark:to-sky-900 dark:text-blue-300'
+        : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
       }
     `;
 
     return (
-      <div className={`min-h-screen transition-colors duration-200 ${
-        isDark ? 'bg-gray-900' : 'bg-gradient-to-br from-gray-50 to-gray-100'
-      }`}>
+      <div className="min-h-screen transition-colors duration-200 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         {/* Modern Navigation Bar */}
-        <nav className={`${
-          isDark 
-            ? 'bg-gray-800 bg-opacity-90 border-gray-700' 
-            : 'bg-white bg-opacity-90 border-gray-200'
-        } backdrop-blur-sm border-b sticky top-0 z-50 transition-colors duration-200`}>
+        <nav className="bg-white bg-opacity-90 border-gray-200 dark:bg-gray-800 dark:bg-opacity-90 dark:border-gray-700 backdrop-blur-sm border-b sticky top-0 z-50 transition-colors duration-200">
           <div className="w-full px-4">
             <div className="flex justify-between items-center h-16 relative">
               {/* Left Side - Hamburger Menu Button */}
               <div className="flex-shrink-0">
                 <button
                   onClick={() => setSidebarOpen(!isSidebarOpen)}
-                  className={`p-2 rounded-lg ${
-                    isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'
-                  } transition-colors duration-200`}
+                  className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-200"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -134,11 +117,9 @@ export const Route = createRootRoute({
                     {companyConfig.product.name}
                   </span>
                   {/* Separator */}
-                  <div className={`h-6 w-px ${isDark ? 'bg-gray-700' : 'bg-gray-300'}`}></div>
+                  <div className="h-6 w-px bg-gray-300 dark:bg-gray-700"></div>
                   {/* Customer Name */}
-                  <div className={`text-sm font-medium ${
-                    isDark ? 'text-gray-300' : 'text-gray-600'
-                  } pointer-events-none`}>
+                  <div className="text-sm font-medium text-gray-600 dark:text-gray-300 pointer-events-none">
                     {companyConfig.customer.name}
                   </div>
                 </div>
@@ -147,22 +128,15 @@ export const Route = createRootRoute({
               {/* Right Side - Theme Toggle Button */}
               <div className="flex-shrink-0">
                 <button 
-                  onClick={toggleTheme}
-                  className={`p-2 rounded-lg ${
-                    isDark 
-                      ? 'text-gray-300 hover:bg-gray-700' 
-                      : 'text-gray-600 hover:bg-gray-100'
-                  } transition-colors duration-200`}
+                  onClick={() => {document.documentElement.classList.toggle('dark')}}
+                  className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-200"
                 >
-                  {isDark ? (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                  )}
+                  <svg className="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  <svg className="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
                 </button>
               </div>
             </div>
@@ -174,9 +148,7 @@ export const Route = createRootRoute({
           <div 
             className={`fixed inset-y-0 left-0 w-64 transition-transform duration-300 ease-in-out transform ${
               isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-            } ${isDark ? 'bg-gray-800' : 'bg-white'} border-r ${
-              isDark ? 'border-gray-700' : 'border-gray-200'
-            } flex flex-col h-screen`}
+            } bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-screen`}
           >
             {/* Menu Items */}
             <div className="flex-1 pt-20 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
@@ -198,9 +170,7 @@ export const Route = createRootRoute({
             </div>
 
             {/* Copyright Section */}
-            <div className={`p-4 border-t ${
-              isDark ? 'border-gray-700 text-gray-400' : 'border-gray-200 text-gray-500'
-            } mt-auto select-none pointer-events-none`}>
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 mt-auto select-none pointer-events-none">
               <div className="text-center text-sm">
                 <div className="font-semibold bg-gradient-to-r from-blue-500 to-sky-600 bg-clip-text text-transparent">
                   {companyConfig.product.developer}
@@ -214,14 +184,14 @@ export const Route = createRootRoute({
 
           {/* Main Content */}
           <div className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
-            <main className={`px-4 sm:px-6 lg:px-8 py-8 ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
+            <main className="px-4 sm:px-6 lg:px-8 py-8 text-gray-900 dark:text-gray-100">
               <Outlet />
             </main>
           </div>
         </div>
 
         {/* DevTools - Only in development */}
-        {/* process.env.NODE_ENV === 'development' && <TanStackRouterDevtools /> */}
+        { process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />}
       </div>
     )
   }
