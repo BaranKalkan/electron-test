@@ -8,6 +8,26 @@ const db = new Database(dbPath);
 
 db.pragma('journal_mode = WAL');
 
+// Veritabanı şemasını oluştur
+db.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE
+  )
+`);
+
+// Örnek verileri ekle
+const insertUser = db.prepare('INSERT OR IGNORE INTO users (name, email) VALUES (?, ?)');
+try {
+  insertUser.run('Ahmet Yılmaz', 'ahmet@example.com');
+  insertUser.run('Ayşe Demir', 'ayse@example.com');
+  insertUser.run('Mehmet Kaya', 'mehmet@example.com');
+  console.log('Sample data has been added successfully');
+} catch (error) {
+  console.log('Error while adding sample data:', error);
+}
+
 export const dbOperations = {
   getAllUsers: () => {
     const stmt = db.prepare('SELECT * FROM users');

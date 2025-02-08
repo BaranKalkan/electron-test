@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: electron-test
+appId: com.antek.anser
+productName: AnTek Servis Takip Sistemi
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: electron-test
+  executableName: AnSer
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
