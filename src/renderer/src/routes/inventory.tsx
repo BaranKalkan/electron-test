@@ -72,7 +72,6 @@ const partsData = [
 ]
 
 function Inventory() {
-  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedPart, setSelectedPart] = useState<string | null>(null)
   const [showSidebar, setShowSidebar] = useState(false)
@@ -84,23 +83,6 @@ function Inventory() {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          setIsDark(document.documentElement.classList.contains('dark'))
-        }
-      })
-    })
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    })
-
-    return () => observer.disconnect()
-  }, [])
 
   // Dışarı tıklamayı dinle
   useEffect(() => {
@@ -158,26 +140,18 @@ function Inventory() {
   return (
     <div className="p-4">
       {/* Başlık ve Hızlı İşlemler */}
-      <div className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800/40' : 'bg-white/80'} backdrop-blur-sm shadow-lg mb-8 relative z-10`}>
+      <div className="p-6 rounded-2xl bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm shadow-lg mb-8 relative z-10">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 flex items-center justify-center rounded-xl ${
-              isDark ? 'bg-blue-500/10' : 'bg-blue-50'
-            }`}>
+            <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10">
               <span className="text-xl">📦</span>
             </div>
-            <h1 className={`text-2xl font-bold ${
-              isDark ? 'text-gray-100' : 'text-gray-800'
-            }`}>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               Parça ve Stok Yönetimi
             </h1>
           </div>
           <div className="flex gap-3">
-            <button className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 ${
-              isDark 
-                ? 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20' 
-                : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-            }`}>
+            <button className="flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 dark:text-blue-400">
               <span>➕</span>
               <span>Yeni Parça Ekle</span>
             </button>
@@ -187,16 +161,12 @@ function Inventory() {
         {/* Arama ve Filtreleme */}
         <div className="flex flex-wrap gap-4">
           <div className="flex-1">
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-xl ${
-              isDark ? 'bg-gray-700/50' : 'bg-gray-50'
-            }`}>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-700/50">
               <span>🔍</span>
               <input
                 type="text"
                 placeholder="Parça adı veya kategori ara..."
-                className={`w-full bg-transparent border-none focus:outline-none ${
-                  isDark ? 'text-gray-200' : 'text-gray-700'
-                }`}
+                className="w-full bg-transparent border-none focus:outline-none text-gray-700 dark:text-gray-200"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -206,8 +176,8 @@ function Inventory() {
                   onClick={() => setStockFilter('all')}
                   className={`w-[70px] px-2 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
                     stockFilter === 'all'
-                      ? (isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600')
-                      : (isDark ? 'text-gray-400 hover:bg-gray-700/50' : 'text-gray-600 hover:bg-gray-100')
+                      ? 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400'
+                      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700/50'
                   }`}
                 >
                   Tümü
@@ -216,8 +186,8 @@ function Inventory() {
                   onClick={() => setStockFilter('normal')}
                   className={`w-[100px] px-2 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
                     stockFilter === 'normal'
-                      ? (isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-50 text-green-600')
-                      : (isDark ? 'text-gray-400 hover:bg-gray-700/50' : 'text-gray-600 hover:bg-gray-100')
+                      ? 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400'
+                      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700/50'
                   }`}
                 >
                   Normal Seviye
@@ -226,8 +196,8 @@ function Inventory() {
                   onClick={() => setStockFilter('critical')}
                   className={`w-[85px] px-2 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
                     stockFilter === 'critical'
-                      ? (isDark ? 'bg-red-500/10 text-red-400' : 'bg-red-50 text-red-600')
-                      : (isDark ? 'text-gray-400 hover:bg-gray-700/50' : 'text-gray-600 hover:bg-gray-100')
+                      ? 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400'
+                      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700/50'
                   }`}
                 >
                   Kritik Stok
@@ -239,20 +209,11 @@ function Inventory() {
             <button
               ref={buttonRef}
               onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 ${
-                isDark 
-                  ? 'bg-gray-700/50 text-gray-200 hover:bg-gray-700/70' 
-                  : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-              }`}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 bg-gray-50 hover:bg-gray-100 text-gray-700 dark:bg-gray-700/50 dark:text-gray-200 dark:hover:bg-gray-700/70"
             >
               <span className="text-base">📑</span>
               <span>{selectedCategory || 'Tüm Kategoriler'}</span>
-              <svg 
-                className={`w-4 h-4 ml-2 transition-transform duration-200 ${showCategoryDropdown ? 'rotate-180' : ''}`}
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
@@ -260,87 +221,30 @@ function Inventory() {
             {showCategoryDropdown && (
               <div 
                 ref={dropdownRef}
-                style={{ zIndex: -1 }}
-                className={`absolute right-0 mt-2 w-56 rounded-xl shadow-xl ${
-                  isDark ? 'bg-gray-800/95 border border-gray-700' : 'bg-white/95 border border-gray-200'
-                } backdrop-blur-sm transform transition-all duration-200 ease-out origin-top`}
+                className="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
               >
-                <div className="py-1">
+                <div className="py-2">
                   <button
                     onClick={() => {
                       setSelectedCategory(null)
                       setShowCategoryDropdown(false)
                     }}
-                    className={`flex items-center w-full px-4 py-2.5 text-sm transition-colors duration-200 ${
-                      !selectedCategory
-                        ? isDark 
-                          ? 'bg-blue-500/10 text-blue-400' 
-                          : 'bg-blue-50 text-blue-600'
-                        : isDark 
-                          ? 'text-gray-300 hover:bg-gray-700/70' 
-                          : 'text-gray-700 hover:bg-gray-100'
-                    }`}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
                   >
-                    <span className="mr-3">📑</span>
-                    <span className="font-medium">Tüm Kategoriler</span>
+                    Tüm Kategoriler
                   </button>
-
-                  <button
-                    onClick={() => {
-                      setSelectedCategory('Motor')
-                      setShowCategoryDropdown(false)
-                    }}
-                    className={`flex items-center w-full px-4 py-2.5 text-sm transition-colors duration-200 ${
-                      selectedCategory === 'Motor'
-                        ? isDark 
-                          ? 'bg-blue-500/10 text-blue-400' 
-                          : 'bg-blue-50 text-blue-600'
-                        : isDark 
-                          ? 'text-gray-300 hover:bg-gray-700/70' 
-                          : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    <span className="mr-3">🔧</span>
-                    <span className="font-medium">Motor</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setSelectedCategory('Fren')
-                      setShowCategoryDropdown(false)
-                    }}
-                    className={`flex items-center w-full px-4 py-2.5 text-sm transition-colors duration-200 ${
-                      selectedCategory === 'Fren'
-                        ? isDark 
-                          ? 'bg-blue-500/10 text-blue-400' 
-                          : 'bg-blue-50 text-blue-600'
-                        : isDark 
-                          ? 'text-gray-300 hover:bg-gray-700/70' 
-                          : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    <span className="mr-3">🛑</span>
-                    <span className="font-medium">Fren</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setSelectedCategory('Ateşleme')
-                      setShowCategoryDropdown(false)
-                    }}
-                    className={`flex items-center w-full px-4 py-2.5 text-sm transition-colors duration-200 ${
-                      selectedCategory === 'Ateşleme'
-                        ? isDark 
-                          ? 'bg-blue-500/10 text-blue-400' 
-                          : 'bg-blue-50 text-blue-600'
-                        : isDark 
-                          ? 'text-gray-300 hover:bg-gray-700/70' 
-                          : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    <span className="mr-3">⚡</span>
-                    <span className="font-medium">Ateşleme</span>
-                  </button>
+                  {Array.from(new Set(partsData.map(part => part.category))).map(category => (
+                    <button
+                      key={category}
+                      onClick={() => {
+                        setSelectedCategory(category)
+                        setShowCategoryDropdown(false)
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    >
+                      {category}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
@@ -349,111 +253,83 @@ function Inventory() {
       </div>
 
       {/* Parça Listesi */}
-      <div className={`rounded-2xl ${isDark ? 'bg-gray-800/40' : 'bg-white/80'} backdrop-blur-sm shadow-lg`}>
+      <div className="rounded-2xl bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Parça Adı</th>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Kategori</th>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Mevcut Stok</th>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Birim Fiyat</th>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Son Kullanım</th>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Durum</th>
+              <tr className="border-b border-gray-200 dark:border-gray-700">
+                <th className="py-4 px-6 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Parça Adı</th>
+                <th className="py-4 px-6 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Kategori</th>
+                <th className="py-4 px-6 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Stok</th>
+                <th className="py-4 px-6 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Fiyat</th>
+                <th className="py-4 px-6 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Son Kullanma</th>
                 <th className="w-10"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {paginatedParts.map((part) => (
-                <tr key={part.id} className={`${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-50'} transition-colors duration-200`}>
-                  <td className={`py-4 px-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                <tr key={part.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors duration-200">
+                  <td className="py-4 px-6 text-gray-700 dark:text-gray-300">
                     <div className="flex items-center">
                       <span>{part.name}</span>
                     </div>
                   </td>
-                  <td className={`py-4 px-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{part.category}</td>
-                  <td className={`py-4 px-6 ${
-                    part.isCritical 
-                      ? isDark ? 'text-red-400' : 'text-red-600'
-                      : isDark ? 'text-gray-300' : 'text-gray-700'
-                  }`}>{part.stock}</td>
-                  <td className={`py-4 px-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{part.price}₺</td>
-                  <td className={`py-4 px-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{part.expiryDate}</td>
-                  <td className={`py-4 px-6`}>
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                  <td className="py-4 px-6 text-gray-700 dark:text-gray-300">{part.category}</td>
+                  <td className="py-4 px-6">
+                    <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
                       part.isCritical
-                        ? isDark ? 'bg-red-500/20 text-red-400 border border-red-400/20' : 'bg-red-100/80 text-red-600 border border-red-200'
-                        : isDark ? 'bg-green-500/20 text-green-400 border border-green-400/20' : 'bg-green-100/80 text-green-600 border border-green-200'
+                        ? 'bg-red-100 text-red-800 dark:bg-red-500/20 dark:text-red-400'
+                        : 'bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-400'
                     }`}>
-                      {part.isCritical ? 'Kritik Seviye' : 'Normal Seviye'}
+                      {part.stock} adet
                     </span>
                   </td>
+                  <td className="py-4 px-6 text-gray-700 dark:text-gray-300">{part.price}₺</td>
+                  <td className="py-4 px-6 text-gray-700 dark:text-gray-300">{part.expiryDate}</td>
                   <td className="py-4 px-6 relative">
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
                         handleMenuClick(part.id)
                       }}
-                      className={`p-1.5 rounded-lg transition-colors duration-200 ${
-                        isDark 
-                          ? 'hover:bg-gray-600/50' 
-                          : 'hover:bg-gray-200/50'
-                      }`}
+                      className="p-1.5 rounded-lg transition-colors duration-200 hover:bg-gray-200/50 dark:hover:bg-gray-600/50"
                     >
                       <span className="text-xl">⋮</span>
                     </button>
                     {activeMenu === part.id && (
                       <div 
-                        className={`fixed mt-1 w-64 rounded-xl shadow-xl ${
-                          isDark ? 'bg-gray-800/95 border border-gray-700' : 'bg-white/95 border border-gray-200'
-                        } backdrop-blur-sm z-50 transform transition-all duration-200 ease-out scale-100 opacity-100`} 
+                        className="fixed mt-1 w-64 rounded-xl shadow-xl bg-white/95 dark:bg-gray-800/95 border border-gray-200 dark:border-gray-700 backdrop-blur-sm z-50 transform transition-all duration-200 ease-out scale-100 opacity-100"
                         style={{ right: '0.5rem' }}
                       >
                         <div className="py-2 px-1">
                           <button
                             onClick={() => handleAction(part.id, 'view-details')}
-                            className={`flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 ${
-                              isDark 
-                                ? 'text-gray-300 hover:bg-gray-700/70' 
-                                : 'text-gray-700 hover:bg-gray-100/80'
-                            }`}
+                            className="flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 text-gray-700 hover:bg-gray-100/80 dark:text-gray-300 dark:hover:bg-gray-700/70"
                           >
                             <span className="mr-3 text-base">📄</span>
-                            <span className="font-medium">Detayları Görüntüle</span>
+                            <span className="font-medium">Parça Detayları</span>
                           </button>
                           <button
-                            onClick={() => handleAction(part.id, 'update-stock')}
-                            className={`flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 ${
-                              isDark 
-                                ? 'text-gray-300 hover:bg-gray-700/70' 
-                                : 'text-gray-700 hover:bg-gray-100/80'
-                            }`}
+                            onClick={() => handleAction(part.id, 'edit')}
+                            className="flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 text-gray-700 hover:bg-gray-100/80 dark:text-gray-300 dark:hover:bg-gray-700/70"
                           >
-                            <span className="mr-3 text-base">📦</span>
-                            <span className="font-medium">Stok Güncelle</span>
+                            <span className="mr-3 text-base">✏️</span>
+                            <span className="font-medium">Düzenle</span>
                           </button>
                           <button
-                            onClick={() => handleAction(part.id, 'view-history')}
-                            className={`flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 ${
-                              isDark 
-                                ? 'text-gray-300 hover:bg-gray-700/70' 
-                                : 'text-gray-700 hover:bg-gray-100/80'
-                            }`}
+                            onClick={() => handleAction(part.id, 'add-stock')}
+                            className="flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 text-gray-700 hover:bg-gray-100/80 dark:text-gray-300 dark:hover:bg-gray-700/70"
                           >
-                            <span className="mr-3 text-base">📊</span>
-                            <span className="font-medium">Kullanım Geçmişi</span>
+                            <span className="mr-3 text-base">➕</span>
+                            <span className="font-medium">Stok Ekle</span>
                           </button>
                           <div className="h-px mx-3 my-1 bg-gray-200 dark:bg-gray-700"></div>
                           <button
                             onClick={() => handleAction(part.id, 'delete')}
-                            className={`flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 ${
-                              isDark 
-                                ? 'text-red-400 hover:bg-red-500/20' 
-                                : 'text-red-600 hover:bg-red-50'
-                            }`}
+                            className="flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/20"
                           >
                             <span className="mr-3 text-base">🗑️</span>
-                            <span className="font-medium">Parça Kaydını Sil</span>
+                            <span className="font-medium">Parçayı Sil</span>
                           </button>
                         </div>
                       </div>
@@ -466,22 +342,19 @@ function Inventory() {
         </div>
 
         {/* Sayfalama */}
-        <div className={`flex items-center justify-between px-6 py-4 ${isDark ? 'bg-gray-800/60' : 'bg-white/60'} backdrop-blur-sm rounded-b-2xl border-t ${isDark ? 'border-gray-700/50' : 'border-gray-200/50'}`}>
-          <div className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+        <div className="flex items-center justify-between px-6 py-4 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-b-2xl border-t border-gray-200/50 dark:border-gray-700/50">
+          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
             Toplam {filteredParts.length} parça
           </div>
+          
           <div className="flex items-center gap-1">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className={`p-2 rounded-lg transition-all duration-200 ${
-                isDark 
-                  ? currentPage === 1 
-                    ? 'text-gray-600 cursor-not-allowed' 
-                    : 'text-gray-400 hover:bg-gray-700/50 hover:text-blue-400' 
-                  : currentPage === 1 
-                    ? 'text-gray-300 cursor-not-allowed' 
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'
+                currentPage === 1 
+                  ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed' 
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-blue-400'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -489,7 +362,7 @@ function Inventory() {
               </svg>
             </button>
 
-            <div className={`flex items-center ${isDark ? 'bg-gray-700/50' : 'bg-gray-100'} rounded-lg px-2`}>
+            <div className="flex items-center bg-gray-100 dark:bg-gray-700/50 rounded-lg px-2">
               {[...Array(totalPages)].map((_, index) => {
                 const pageNumber = index + 1
                 const isCurrentPage = pageNumber === currentPage
@@ -504,12 +377,8 @@ function Inventory() {
                       onClick={() => handlePageChange(pageNumber)}
                       className={`min-w-[2rem] h-8 mx-0.5 text-sm font-medium rounded-md transition-all duration-200 ${
                         isCurrentPage
-                          ? isDark 
-                            ? 'bg-blue-500/20 text-blue-400' 
-                            : 'bg-blue-100 text-blue-600'
-                          : isDark 
-                            ? 'text-gray-400 hover:text-blue-400' 
-                            : 'text-gray-600 hover:text-blue-600'
+                          ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400'
+                          : 'text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400'
                       }`}
                     >
                       {pageNumber}
@@ -522,9 +391,7 @@ function Inventory() {
                   return (
                     <span 
                       key={pageNumber} 
-                      className={`min-w-[2rem] h-8 mx-0.5 flex items-center justify-center text-sm ${
-                        isDark ? 'text-gray-600' : 'text-gray-400'
-                      }`}
+                      className="min-w-[2rem] h-8 mx-0.5 flex items-center justify-center text-sm text-gray-400 dark:text-gray-600"
                     >
                       ···
                     </span>
@@ -538,13 +405,9 @@ function Inventory() {
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               className={`p-2 rounded-lg transition-all duration-200 ${
-                isDark 
-                  ? currentPage === totalPages 
-                    ? 'text-gray-600 cursor-not-allowed' 
-                    : 'text-gray-400 hover:bg-gray-700/50 hover:text-blue-400' 
-                  : currentPage === totalPages 
-                    ? 'text-gray-300 cursor-not-allowed' 
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'
+                currentPage === totalPages 
+                  ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed' 
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-blue-400'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -555,75 +418,93 @@ function Inventory() {
         </div>
       </div>
 
-      {/* Yan Panel - Parça Detayları */}
+      {/* Parça Detay Yan Paneli */}
       {showSidebar && selectedPart && (
-        <div className={`fixed inset-y-0 right-0 w-96 ${
-          isDark ? 'bg-gray-800/95' : 'bg-white/95'
-        } backdrop-blur-sm shadow-xl border-l ${
-          isDark ? 'border-gray-700' : 'border-gray-200'
-        } transform transition-transform duration-300 translate-x-0`}>
-          <div className="h-full overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className={`text-xl font-bold ${
-                  isDark ? 'text-gray-100' : 'text-gray-800'
-                }`}>Parça Detayları</h2>
-                <button
-                  onClick={() => {
-                    setShowSidebar(false)
-                    setSelectedPart(null)
-                  }}
-                  className={`p-2 rounded-lg transition-colors duration-200 ${
-                    isDark 
-                      ? 'hover:bg-gray-700/70' 
-                      : 'hover:bg-gray-100'
-                  }`}
-                >
-                  <span className="text-xl">✕</span>
-                </button>
-              </div>
-              
-              {/* Parça Bilgileri */}
-              <div className={`p-4 rounded-xl mb-6 ${
-                isDark ? 'bg-gray-700/50' : 'bg-gray-50'
-              }`}>
-                <h3 className={`text-lg font-medium mb-4 ${
-                  isDark ? 'text-gray-200' : 'text-gray-700'
-                }`}>Genel Bilgiler</h3>
-                <div className="space-y-3">
-                  {Object.entries(partsData.find(p => p.id === selectedPart)?.details || {}).map(([key, value]) => (
-                    <div key={key} className="flex justify-between">
-                      <span className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {key === 'code' ? 'Parça Kodu' : key === 'minStock' ? 'Minimum Stok' : key}
-                      </span>
-                      <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                        {typeof value === 'number' ? value : value.toString()}
-                      </span>
-                    </div>
-                  ))}
+        <div className="fixed inset-y-0 right-0 w-96 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm shadow-2xl border-l border-gray-200 dark:border-gray-700 p-6 transform transition-transform duration-300 translate-x-0">
+          <div className="h-full flex flex-col">
+            {/* Başlık */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+                Parça Detayları
+              </h2>
+              <button
+                onClick={() => setShowSidebar(false)}
+                className="p-2 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+            
+            {/* Parça Bilgileri */}
+            <div className="mb-6 p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+              <h3 className="text-sm font-medium mb-3 text-gray-500 dark:text-gray-400">
+                Temel Bilgiler
+              </h3>
+              <div className="space-y-2">
+                <div className="text-base text-gray-700 dark:text-gray-200">
+                  {partsData.find(p => p.id === selectedPart)?.name}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Kategori: {partsData.find(p => p.id === selectedPart)?.category}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Kod: {partsData.find(p => p.id === selectedPart)?.details.code}
                 </div>
               </div>
+            </div>
 
-              {/* Kullanım Geçmişi */}
-              <div>
-                <h3 className={`text-lg font-medium mb-4 ${
-                  isDark ? 'text-gray-200' : 'text-gray-700'
-                }`}>Kullanım Geçmişi</h3>
-                <div className="space-y-4">
+            {/* Stok Bilgileri */}
+            <div className="mb-6 p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+              <h3 className="text-sm font-medium mb-3 text-gray-500 dark:text-gray-400">
+                Stok Bilgileri
+              </h3>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Mevcut Stok</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    partsData.find(p => p.id === selectedPart)?.isCritical
+                      ? 'bg-red-100 text-red-800 dark:bg-red-500/20 dark:text-red-400'
+                      : 'bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-400'
+                  }`}>
+                    {partsData.find(p => p.id === selectedPart)?.stock} adet
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Kritik Seviye</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    {partsData.find(p => p.id === selectedPart)?.details.minStock} adet
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Birim Fiyat</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {partsData.find(p => p.id === selectedPart)?.price}₺
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Kullanım Geçmişi */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="text-sm font-medium mb-3 text-gray-500 dark:text-gray-400">
+                  Kullanım Geçmişi
+                </h3>
+                <div className="space-y-3">
                   {partsData.find(p => p.id === selectedPart)?.details.history.map((record, index) => (
-                    <div key={index} className={`p-4 rounded-xl ${
-                      isDark ? 'bg-gray-700/50' : 'bg-gray-50'
-                    }`}>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                          {record.date}
-                        </span>
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <div key={index} className="p-3 rounded-lg bg-white dark:bg-gray-800/50">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                            {record.date}
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {record.plate} - {record.customer}
+                          </div>
+                        </div>
+                        <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
                           {record.quantity} adet
-                        </span>
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {record.plate} - {record.customer}
+                        </div>
                       </div>
                     </div>
                   ))}
