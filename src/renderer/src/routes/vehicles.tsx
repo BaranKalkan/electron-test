@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/vehicles')({
   component: Vehicles,
@@ -61,30 +61,12 @@ const vehiclesData = [
 ]
 
 function Vehicles() {
-  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null)
   const [showSidebar, setShowSidebar] = useState(false)
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
-
-  useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          setIsDark(document.documentElement.classList.contains('dark'))
-        }
-      })
-    })
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    })
-
-    return () => observer.disconnect()
-  }, [])
 
   // Filtreleme fonksiyonu
   const filteredVehicles = vehiclesData.filter(vehicle => {
@@ -123,26 +105,18 @@ function Vehicles() {
   return (
     <div className="p-4">
       {/* Başlık ve Hızlı İşlemler */}
-      <div className={`p-6 rounded-2xl ${isDark ? 'bg-gray-800/40' : 'bg-white/80'} backdrop-blur-sm shadow-lg mb-8`}>
+      <div className="p-6 rounded-2xl bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm shadow-lg mb-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 flex items-center justify-center rounded-xl ${
-              isDark ? 'bg-blue-500/10' : 'bg-blue-50'
-            }`}>
+            <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10">
               <span className="text-xl">🚗</span>
             </div>
-            <h1 className={`text-2xl font-bold ${
-              isDark ? 'text-gray-100' : 'text-gray-800'
-            }`}>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
               Araç Yönetimi
             </h1>
           </div>
           <div className="flex gap-3">
-            <button className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 ${
-              isDark 
-                ? 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20' 
-                : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-            }`}>
+            <button className="flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 dark:text-blue-400">
               <span>➕</span>
               <span>Yeni Araç Ekle</span>
             </button>
@@ -152,16 +126,12 @@ function Vehicles() {
         {/* Arama ve Filtreleme */}
         <div className="flex flex-wrap gap-4">
           <div className="flex-1">
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-xl ${
-              isDark ? 'bg-gray-700/50' : 'bg-gray-50'
-            }`}>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-700/50">
               <span>🔍</span>
               <input
                 type="text"
                 placeholder="Plaka, müşteri adı veya model ara..."
-                className={`w-full bg-transparent border-none focus:outline-none ${
-                  isDark ? 'text-gray-200' : 'text-gray-700'
-                }`}
+                className="w-full bg-transparent border-none focus:outline-none text-gray-700 dark:text-gray-200"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -171,69 +141,55 @@ function Vehicles() {
       </div>
 
       {/* Araç Listesi */}
-      <div className={`rounded-2xl ${isDark ? 'bg-gray-800/40' : 'bg-white/80'} backdrop-blur-sm shadow-lg`}>
+      <div className="rounded-2xl bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Plaka</th>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Müşteri Adı</th>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Araç Marka/Model</th>
-                <th className={`py-4 px-6 text-left text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Son Servis Tarihi</th>
+              <tr className="border-b border-gray-200 dark:border-gray-700">
+                <th className="py-4 px-6 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Plaka</th>
+                <th className="py-4 px-6 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Müşteri Adı</th>
+                <th className="py-4 px-6 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Araç Marka/Model</th>
+                <th className="py-4 px-6 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Son Servis Tarihi</th>
                 <th className="w-10"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {paginatedVehicles.map((vehicle) => (
-                <tr key={vehicle.id} className={`${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-50'} transition-colors duration-200`}>
-                  <td className={`py-4 px-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                <tr key={vehicle.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors duration-200">
+                  <td className="py-4 px-6 text-gray-700 dark:text-gray-300">
                     <div className="flex items-center">
                       <span>{vehicle.plate}</span>
                     </div>
                   </td>
-                  <td className={`py-4 px-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{vehicle.customerName}</td>
-                  <td className={`py-4 px-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{vehicle.model}</td>
-                  <td className={`py-4 px-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{vehicle.lastService}</td>
+                  <td className="py-4 px-6 text-gray-700 dark:text-gray-300">{vehicle.customerName}</td>
+                  <td className="py-4 px-6 text-gray-700 dark:text-gray-300">{vehicle.model}</td>
+                  <td className="py-4 px-6 text-gray-700 dark:text-gray-300">{vehicle.lastService}</td>
                   <td className="py-4 px-6 relative">
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
                         handleMenuClick(vehicle.id)
                       }}
-                      className={`p-1.5 rounded-lg transition-colors duration-200 ${
-                        isDark 
-                          ? 'hover:bg-gray-600/50' 
-                          : 'hover:bg-gray-200/50'
-                      }`}
+                      className="p-1.5 rounded-lg transition-colors duration-200 hover:bg-gray-200/50 dark:hover:bg-gray-600/50"
                     >
                       <span className="text-xl">⋮</span>
                     </button>
                     {activeMenu === vehicle.id && (
                       <div 
-                        className={`fixed mt-1 w-64 rounded-xl shadow-xl ${
-                          isDark ? 'bg-gray-800/95 border border-gray-700' : 'bg-white/95 border border-gray-200'
-                        } backdrop-blur-sm z-50 transform transition-all duration-200 ease-out scale-100 opacity-100`} 
+                        className="fixed mt-1 w-64 rounded-xl shadow-xl bg-white/95 dark:bg-gray-800/95 border border-gray-200 dark:border-gray-700 backdrop-blur-sm z-50 transform transition-all duration-200 ease-out scale-100 opacity-100"
                         style={{ right: '0.5rem' }}
                       >
                         <div className="py-2 px-1">
                           <button
                             onClick={() => handleAction(vehicle.id, 'view-details')}
-                            className={`flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 ${
-                              isDark 
-                                ? 'text-gray-300 hover:bg-gray-700/70' 
-                                : 'text-gray-700 hover:bg-gray-100/80'
-                            }`}
+                            className="flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 text-gray-700 hover:bg-gray-100/80 dark:text-gray-300 dark:hover:bg-gray-700/70"
                           >
                             <span className="mr-3 text-base">📄</span>
                             <span className="font-medium">Detayları Görüntüle</span>
                           </button>
                           <button
                             onClick={() => handleAction(vehicle.id, 'add-service')}
-                            className={`flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 ${
-                              isDark 
-                                ? 'text-gray-300 hover:bg-gray-700/70' 
-                                : 'text-gray-700 hover:bg-gray-100/80'
-                            }`}
+                            className="flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 text-gray-700 hover:bg-gray-100/80 dark:text-gray-300 dark:hover:bg-gray-700/70"
                           >
                             <span className="mr-3 text-base">🛠️</span>
                             <span className="font-medium">Servis İşlemi Ekle</span>
@@ -241,11 +197,7 @@ function Vehicles() {
                           <div className="h-px mx-3 my-1 bg-gray-200 dark:bg-gray-700"></div>
                           <button
                             onClick={() => handleAction(vehicle.id, 'delete')}
-                            className={`flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 ${
-                              isDark 
-                                ? 'text-red-400 hover:bg-red-500/20' 
-                                : 'text-red-600 hover:bg-red-50'
-                            }`}
+                            className="flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors duration-200 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/20"
                           >
                             <span className="mr-3 text-base">🗑️</span>
                             <span className="font-medium">Araç Kaydını Sil</span>
@@ -261,8 +213,8 @@ function Vehicles() {
         </div>
 
         {/* Sayfalama */}
-        <div className={`flex items-center justify-between px-6 py-4 ${isDark ? 'bg-gray-800/60' : 'bg-white/60'} backdrop-blur-sm rounded-b-2xl border-t ${isDark ? 'border-gray-700/50' : 'border-gray-200/50'}`}>
-          <div className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+        <div className="flex items-center justify-between px-6 py-4 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-b-2xl border-t border-gray-200/50 dark:border-gray-700/50">
+          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
             Toplam {filteredVehicles.length} araç
           </div>
           
@@ -271,13 +223,9 @@ function Vehicles() {
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className={`p-2 rounded-lg transition-all duration-200 ${
-                isDark 
-                  ? currentPage === 1 
-                    ? 'text-gray-600 cursor-not-allowed' 
-                    : 'text-gray-400 hover:bg-gray-700/50 hover:text-blue-400' 
-                  : currentPage === 1 
-                    ? 'text-gray-300 cursor-not-allowed' 
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'
+                currentPage === 1 
+                  ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed' 
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-blue-400'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -285,7 +233,7 @@ function Vehicles() {
               </svg>
             </button>
 
-            <div className={`flex items-center ${isDark ? 'bg-gray-700/50' : 'bg-gray-100'} rounded-lg px-2`}>
+            <div className="flex items-center bg-gray-100 dark:bg-gray-700/50 rounded-lg px-2">
               {[...Array(totalPages)].map((_, index) => {
                 const pageNumber = index + 1
                 const isCurrentPage = pageNumber === currentPage
@@ -300,12 +248,8 @@ function Vehicles() {
                       onClick={() => handlePageChange(pageNumber)}
                       className={`min-w-[2rem] h-8 mx-0.5 text-sm font-medium rounded-md transition-all duration-200 ${
                         isCurrentPage
-                          ? isDark 
-                            ? 'bg-blue-500/20 text-blue-400' 
-                            : 'bg-blue-100 text-blue-600'
-                          : isDark 
-                            ? 'text-gray-400 hover:text-blue-400' 
-                            : 'text-gray-600 hover:text-blue-600'
+                          ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400'
+                          : 'text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400'
                       }`}
                     >
                       {pageNumber}
@@ -318,9 +262,7 @@ function Vehicles() {
                   return (
                     <span 
                       key={pageNumber} 
-                      className={`min-w-[2rem] h-8 mx-0.5 flex items-center justify-center text-sm ${
-                        isDark ? 'text-gray-600' : 'text-gray-400'
-                      }`}
+                      className="min-w-[2rem] h-8 mx-0.5 flex items-center justify-center text-sm text-gray-400 dark:text-gray-600"
                     >
                       ···
                     </span>
@@ -334,13 +276,9 @@ function Vehicles() {
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               className={`p-2 rounded-lg transition-all duration-200 ${
-                isDark 
-                  ? currentPage === totalPages 
-                    ? 'text-gray-600 cursor-not-allowed' 
-                    : 'text-gray-400 hover:bg-gray-700/50 hover:text-blue-400' 
-                  : currentPage === totalPages 
-                    ? 'text-gray-300 cursor-not-allowed' 
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'
+                currentPage === totalPages 
+                  ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed' 
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-blue-400'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -353,62 +291,55 @@ function Vehicles() {
 
       {/* Yan Panel - Araç Detayları */}
       {showSidebar && selectedVehicle && (
-        <div className={`fixed inset-y-0 right-0 w-96 ${
-          isDark ? 'bg-gray-800/95' : 'bg-white/95'
-        } backdrop-blur-sm shadow-2xl border-l ${
-          isDark ? 'border-gray-700' : 'border-gray-200'
-        } p-6 transform transition-transform duration-300 translate-x-0`}>
+        <div className="fixed inset-y-0 right-0 w-96 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm shadow-2xl border-l border-gray-200 dark:border-gray-700 p-6 transform transition-transform duration-300 translate-x-0">
           <div className="h-full flex flex-col">
             {/* Başlık */}
             <div className="flex items-center justify-between mb-6">
-              <h2 className={`text-xl font-bold ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
                 Araç Detayları
               </h2>
               <button
                 onClick={() => setShowSidebar(false)}
-                className={`p-2 rounded-lg transition-colors duration-200 ${
-                  isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-                }`}
+                className="p-2 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 ✕
               </button>
             </div>
 
-            {/* Detay İçeriği */}
             <div className="flex-1 overflow-y-auto">
               {/* Araç Bilgileri */}
-              <div className={`p-4 rounded-xl mb-4 ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-                <h3 className={`text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              <div className="p-4 rounded-xl mb-4 bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="text-sm font-medium mb-3 text-gray-600 dark:text-gray-300">
                   Araç Bilgileri
                 </h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Plaka</span>
-                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Plaka</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">
                       {vehiclesData.find(v => v.id === selectedVehicle)?.plate}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Marka/Model</span>
-                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Marka/Model</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">
                       {vehiclesData.find(v => v.id === selectedVehicle)?.model}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Motor No</span>
-                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Motor No</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">
                       {vehiclesData.find(v => v.id === selectedVehicle)?.details.motorNo}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Şasi No</span>
-                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Şasi No</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">
                       {vehiclesData.find(v => v.id === selectedVehicle)?.details.chassisNo}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Kilometre</span>
-                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Kilometre</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">
                       {vehiclesData.find(v => v.id === selectedVehicle)?.details.mileage} km
                     </span>
                   </div>
@@ -416,26 +347,26 @@ function Vehicles() {
               </div>
 
               {/* Müşteri Bilgileri */}
-              <div className={`p-4 rounded-xl mb-4 ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-                <h3 className={`text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              <div className="p-4 rounded-xl mb-4 bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="text-sm font-medium mb-3 text-gray-600 dark:text-gray-300">
                   Müşteri Bilgileri
                 </h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Ad Soyad</span>
-                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Ad Soyad</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">
                       {vehiclesData.find(v => v.id === selectedVehicle)?.customerName}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Telefon</span>
-                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Telefon</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">
                       {vehiclesData.find(v => v.id === selectedVehicle)?.details.customer.phone}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>E-posta</span>
-                    <span className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">E-posta</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">
                       {vehiclesData.find(v => v.id === selectedVehicle)?.details.customer.email}
                     </span>
                   </div>
@@ -443,30 +374,28 @@ function Vehicles() {
               </div>
 
               {/* Servis Geçmişi */}
-              <div className={`p-4 rounded-xl ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-                <h3 className={`text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="text-sm font-medium mb-3 text-gray-600 dark:text-gray-300">
                   Son Servis Kayıtları
                 </h3>
                 <div className="space-y-3">
-                  <div className={`p-3 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                  <div className="p-3 rounded-lg bg-white dark:bg-gray-800">
                     <div className="flex justify-between items-start mb-2">
-                      <span className={`text-sm font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
                         23.01.2024
                       </span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        isDark ? 'bg-green-500/20 text-green-400' : 'bg-green-100 text-green-800'
-                      }`}>
+                      <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-400">
                         Tamamlandı
                       </span>
                     </div>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Motor yağı değişimi, filtre değişimi
                     </p>
                     <div className="flex justify-between items-center mt-2">
-                      <span className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                      <span className="text-xs text-gray-400 dark:text-gray-500">
                         Parçalar: Yağ filtresi, Hava filtresi
                       </span>
-                      <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         1,250₺
                       </span>
                     </div>
@@ -477,18 +406,10 @@ function Vehicles() {
 
             {/* Alt Butonlar */}
             <div className="mt-6 space-y-3">
-              <button className={`w-full py-2.5 px-4 rounded-xl transition-colors duration-200 ${
-                isDark 
-                  ? 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20' 
-                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-              }`}>
+              <button className="w-full py-2.5 px-4 rounded-xl transition-colors duration-200 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 dark:text-blue-400">
                 Yeni Servis İşlemi Ekle
               </button>
-              <button className={`w-full py-2.5 px-4 rounded-xl transition-colors duration-200 ${
-                isDark 
-                  ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-700' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}>
+              <button className="w-full py-2.5 px-4 rounded-xl transition-colors duration-200 bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-gray-700/50 dark:hover:bg-gray-700 dark:text-gray-300">
                 Tüm Servis Geçmişini Görüntüle
               </button>
             </div>
